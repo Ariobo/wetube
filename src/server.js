@@ -1,37 +1,20 @@
 import express from "express";
+import morgan from "morgan";
+import globalRouter from "./router/globalRouter";
+import userRouter from "./router/userRouter";
+import videoRouter from "./router/videoRouter";
 
 const PORT = 4000;
-
 const app = express();
+const logger = morgan("dev");
 
-const home = (req,res,next) => {
-  console.log("Path: "+ `${req.url}`)
-  next()
-}
-
-const date= new Date();
-
-const time = (req, res, next) =>{
-  console.log("Time: "+ date.toLocaleDateString('ko-kr'))
-  next()
-}
-
-const security=(req, res, next)=>{
-  const protector=req.protector
-  if(protector==="http"){
-    console.log("secure")
-  }else{
-    console.log("insecure")
-  }
-  return
-}
-
-
-const protector=(req, res)=>{
-  console.log("ha")
-}
-
-app.get("/", home, time, security, protector);
+app.set("view engine","pug");
+app.set("views",process.cwd()+"/src/views");
+app.use(logger);
+app.use(express.urlencoded({extended:true}))
+app.use("/",globalRouter);
+app.use("/videos",videoRouter);
+app.use("/users",userRouter);
 
 const handleListening = () =>
   console.log(`✅ Server listenting on port http://localhost:${PORT} 🚀`);
