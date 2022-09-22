@@ -50,6 +50,8 @@ export const postlogin = async (req, res) => {
     if(!ok){
         return res.status(400).render("login",{pageTitle,errorMassage: "야 틀리잖아"})
     }
+    req.session.loggedIn=true;
+    req.session.user=user;
     return res.redirect("/");
 }
 export const edit = (req, res) => res.send("Edit User");
