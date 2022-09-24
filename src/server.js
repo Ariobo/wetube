@@ -4,7 +4,7 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import rootRouter from "./router/rootRouter";
 import userRouter from "./router/userRouter";
-import videoRouter from "./router/videoRouter";
+import videoRouter from "./router/videoRouter"; 
 import { localeMiddleware } from "./middlewares";
 
 const app = express();
@@ -16,10 +16,10 @@ app.use(logger);
 app.use(express.urlencoded({extended:true}))
 
 app.use(session({
-    secret: "hello",
-    resave: true,
-    saveUninitialized: true,
-    store: MongoStore.create({mongoUrl:"mongodb://127.0.0.1:27017/wetube"}),
+    secret: process.env.COOKIE_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({mongoUrl:process.env.DB_URL}),
 }))
 
 app.use((req,res,next) => {
